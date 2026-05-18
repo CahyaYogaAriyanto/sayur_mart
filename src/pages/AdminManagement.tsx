@@ -156,6 +156,17 @@ export const AdminManagement: React.FC = () => {
 
   const openEdit = (veg: Vegetable) => {
     setEditingVeg(veg);
+    
+    // Find category name from category_id
+    let categoryName = '';
+    if (veg.category_id) {
+      const foundCategory = categories.find(cat => cat.id === veg.category_id);
+      categoryName = foundCategory ? foundCategory.name : '';
+    } else if (veg.category) {
+      // Fallback to legacy category field
+      categoryName = veg.category;
+    }
+    
     setFormData({
       name: veg.name,
       description: veg.description || '',
@@ -163,7 +174,7 @@ export const AdminManagement: React.FC = () => {
       unit: veg.unit,
       stock: veg.stock,
       min_stock: veg.min_stock || 5,
-      category: veg.category || '',
+      category: categoryName,
       image_url: veg.image_url,
       is_active: veg.is_active
     });
@@ -207,8 +218,13 @@ export const AdminManagement: React.FC = () => {
         setUploadingImage(false);
       }
 
+      // Find category_id from category name
+      const selectedCategory = categories.find(cat => cat.name === formData.category);
+      const category_id = selectedCategory ? selectedCategory.id : null;
+
       const dataToSubmit = {
         ...formData,
+        category_id, // Use category_id instead of category name
         image_url: imageUrl
       };
 
@@ -612,7 +628,7 @@ export const AdminManagement: React.FC = () => {
                       <option value="">Pilih Kategori</option>
                       {categories.map((cat) => (
                         <option key={cat.id} value={cat.name}>
-                          {cat.icon ? `${cat.icon} ` : ''}{cat.name}
+                          {cat.name}
                         </option>
                       ))}
                     </select>

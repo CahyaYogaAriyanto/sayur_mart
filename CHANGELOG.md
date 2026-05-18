@@ -2,6 +2,20 @@
 
 ## ✅ Perbaikan Terbaru
 
+### 🔧 Edit Product Category - Fixed
+**Masalah**: Edit product category tidak berfungsi
+**Solusi**: 
+- Fetch products dengan JOIN ke `product_categories`
+- Convert `category_id` (UUID) ke nama kategori saat edit
+- Convert nama kategori ke `category_id` saat save
+- Transform data untuk menambahkan field `category` (display only)
+
+**File diubah**: 
+- `src/context/InventoryContext.tsx` - Fetch dengan JOIN
+- `src/pages/AdminManagement.tsx` - Konversi category_id ↔ nama
+
+---
+
 ### 🔧 Update Kategori - Fixed
 **Masalah**: Update kategori tidak berhasil
 **Solusi**: 

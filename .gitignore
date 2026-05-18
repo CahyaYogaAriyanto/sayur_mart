@@ -3,5 +3,7 @@ build/
 dist/
 coverage/
 .DS_Store
+.sql
+*.md
 *.log
 !.env.example

@@ -43,17 +43,25 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setIsFetching(true);
     try {
       setLoading(true);
+      
+      // Fetch products with category join
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select(`
+          *,
+          product_categories (
+            id,
+            name
+          )
+        `)
         .order('name', { ascending: true });
 
       if (error) throw error;
 
-      // Transform data: add 'category' field for display (map from category_id or use default)
+      // Transform data: add 'category' field for display from joined data
       const transformedData = (data || []).map(item => ({
         ...item,
-        category: item.category || 'Umbi' // Default category for display
+        category: item.product_categories?.name || 'Uncategorized'
       }));
 
       setVegetables(transformedData);
